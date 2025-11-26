@@ -3,15 +3,37 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import * as compression from 'compression';
+import helmet from 'helmet';
+import { LoggerService } from './core/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+
+  // Use custom logger
+  const logger = app.get(LoggerService);
+  app.useLogger(logger);
+  logger.setContext('Bootstrap');
+
   const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:8080',
     'http://localhost:3000',
     'http://localhost:4200',
   ];
+
+  // Security middleware - Helmet
+  app.use(
+    helmet({
+      contentSecurityPolicy: process.env.NODE_ENV === 'production',
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
+
+  // Compression middleware
+  app.use(compression());
 
   // Enable CORS
   app.enableCors({
@@ -27,6 +49,9 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
@@ -36,15 +61,27 @@ async function bootstrap() {
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Tetris API')
-    .setDescription('API for the Tetris project with advanced authentication')
-    .setVersion('1.0')
+    .setDescription(
+      'Professional NestJS API with advanced authentication, monitoring, and health checks',
+    )
+    .setVersion('2.0')
     .addBearerAuth()
     .addCookieAuth('access_token')
+    .addTag('auth', 'Authentication endpoints')
+    .addTag('health', 'Health check endpoints')
+    .addTag('metrics', 'Prometheus metrics')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+
+  logger.log(`Application is running on: http://localhost:${port}`);
+  logger.log(`Swagger documentation: http://localhost:${port}/api`);
+  logger.log(`Health check: http://localhost:${port}/health`);
+  logger.log(`Metrics: http://localhost:${port}/metrics`);
 }
+
 bootstrap();

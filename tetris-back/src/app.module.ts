@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+
+// Core Module - Infrastructure
+import { CoreModule } from './core/core.module';
+
+// Feature Modules
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma.module';
@@ -16,6 +21,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    // Core Infrastructure Module
+    CoreModule,
     // Rate Limiting Module
     ThrottlerModule.forRoot([
       {
@@ -23,7 +30,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
         limit: 100, // 100 requests per minute (default)
       },
     ]),
+    // Database
     PrismaModule,
+    // Feature Modules
     AuthModule,
     UsersModule,
   ],
