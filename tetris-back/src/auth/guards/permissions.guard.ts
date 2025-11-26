@@ -6,10 +6,7 @@ import {
 } from '../decorators/permissions.decorator';
 import { PrismaService } from 'src/prisma.service';
 
-/**
- * Attribute-Based Access Control (ABAC) Guard
- * Checks user permissions based on resource and action
- */
+
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(
@@ -34,12 +31,10 @@ export class PermissionsGuard implements CanActivate {
       return false;
     }
 
-    // Check if user has required permissions
     const userPermissions = await this.prisma.userPermission.findMany({
       where: { userId: user.id },
     });
 
-    // Check if user has at least one of the required permissions
     return requiredPermissions.some((required) =>
       userPermissions.some(
         (userPerm: any) =>

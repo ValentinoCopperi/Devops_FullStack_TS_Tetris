@@ -7,10 +7,7 @@ export interface Permission {
   action: string;
 }
 
-/**
- * Decorator to specify required permissions for a route
- * Usage: @Permissions({ resource: 'user', action: 'delete' })
- */
+//Decorador para marcar una ruta como segura por permisos
 export const Permissions = (...permissions: Permission[]) =>
   SetMetadata(PERMISSIONS_KEY, permissions);
 

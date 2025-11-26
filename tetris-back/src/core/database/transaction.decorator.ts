@@ -1,9 +1,6 @@
 import { PrismaService } from 'src/prisma.service';
 
-/**
- * Decorator to wrap a method in a Prisma transaction
- * Usage: @Transactional()
- */
+
 export function Transactional() {
   return function (
     target: any,
@@ -31,7 +28,6 @@ export function Transactional() {
           const result = await originalMethod.apply(this, args);
           return result;
         } finally {
-          // Restore original prisma
           this.prisma = originalPrisma;
           this.prismaService = originalPrisma;
         }

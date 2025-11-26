@@ -30,9 +30,7 @@ export class RateLimitService {
     return current > limit;
   }
 
-  /**
-   * Get remaining requests for a key
-   */
+  //Obtener las solicitudes restantes para una clave
   async getRemainingRequests(
     key: string,
     limit: number,
@@ -49,9 +47,7 @@ export class RateLimitService {
     return { remaining, reset };
   }
 
-  /**
-   * Reset rate limit for a key
-   */
+  //Reiniciar el límite de solicitudes para una clave
   async reset(key: string): Promise<void> {
     const redisKey = `rate-limit:${key}`;
     await this.redis.client.del(redisKey);

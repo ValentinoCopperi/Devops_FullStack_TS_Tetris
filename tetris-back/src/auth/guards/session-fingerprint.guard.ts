@@ -7,10 +7,7 @@ import {
 import { RedisService } from 'src/redis.service';
 import { createHash } from 'crypto';
 
-/**
- * Session Hijacking Protection Guard
- * Validates user-agent and optional fingerprint
- */
+
 @Injectable()
 export class SessionFingerprintGuard implements CanActivate {
   constructor(private readonly redis: RedisService) {}
@@ -40,7 +37,6 @@ export class SessionFingerprintGuard implements CanActivate {
       );
     }
 
-    // Store/update fingerprint
     await this.redis.set(
       `session:${user.id}:fingerprint`,
       fingerprint,

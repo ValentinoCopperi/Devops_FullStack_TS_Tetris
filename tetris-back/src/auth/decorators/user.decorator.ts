@@ -1,10 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-/**
- * Decorator to extract the user from the request
- * Usage: @User() user: UserPayload
- * Usage: @User('id') userId: string
- */
+//Decorador para extraer el usuario de la solicitud
 export const User = createParamDecorator(
   (data: string | undefined, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();

@@ -36,7 +36,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 requests per minute
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) 
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
@@ -45,14 +45,13 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 requests per minute
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) 
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const ipAddress = this.getClientIp(req);
     const userAgent = req.headers['user-agent'] || 'unknown';
 
     const tokens = await this.authService.login(req.user, ipAddress, userAgent);
 
-    // Set cookies
     this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 
     return tokens;
@@ -91,7 +90,6 @@ export class AuthController {
       userAgent,
     );
 
-    // Update cookies
     this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 
     return tokens;
@@ -120,7 +118,7 @@ export class AuthController {
 
   @Public()
   @Post('resend-verification')
-  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 3 requests per minute
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) 
   async resendVerification(@Body('email') email: string) {
     return this.authService.resendVerificationEmail(email);
   }
@@ -129,7 +127,7 @@ export class AuthController {
 
   @Public()
   @Post('forgot-password')
-  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 3 requests per minute
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) 
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() dto: RequestPasswordResetDto) {
     return this.authService.requestPasswordReset(dto.email);
@@ -177,7 +175,7 @@ export class AuthController {
   @Get('google')
   @UseGuards(GoogleOAuthGuard)
   async googleAuth() {
-    // Initiates Google OAuth flow
+    // Impleentar luego la autenticacion con Google
   }
 
   @Public()
@@ -192,10 +190,8 @@ export class AuthController {
 
     const tokens = await this.authService.login(req.user, ipAddress, userAgent);
 
-    // Set cookies
     this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 
-    // Redirect to frontend
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
     res.redirect(`${frontendUrl}/auth/callback?token=${tokens.accessToken}`);
   }

@@ -41,7 +41,6 @@ export class AuthService {
   // ==================== REGISTRATION & LOGIN ====================
 
   async register(dto: RegisterDto) {
-    // Check if email already exists
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -53,11 +52,9 @@ export class AuthService {
     // Hash password
     const hashedPassword = await bcrypt.hash(dto.password, 12);
 
-    // Generate email verification token
     const emailVerificationToken = this.generateSecureToken();
     const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    // Create user
     const user = await this.prisma.user.create({
       data: {
         email: dto.email.toLowerCase(),
@@ -77,7 +74,7 @@ export class AuthService {
       success: true,
     });
 
-    // TODO: Send verification email (integrate with email service)
+    // TODO: Integrar con el servicio de email para enviar el token de verificación
     this.logger.log(`Verification token for ${user.email}: ${emailVerificationToken}`);
 
     return {

@@ -7,9 +7,7 @@ import {
 import { Observable, tap, catchError } from 'rxjs';
 import { AuditService } from '../services/audit.service';
 
-/**
- * Interceptor to automatically log sensitive operations
- */
+//Interceptor para auditar las operaciones sensibles
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly auditService: AuditService) {}
@@ -23,7 +21,6 @@ export class AuditInterceptor implements NestInterceptor {
     const action = this.getActionFromRequest(method, url);
 
     if (!action) {
-      // Skip audit for non-sensitive operations
       return next.handle();
     }
 
@@ -59,7 +56,6 @@ export class AuditInterceptor implements NestInterceptor {
   }
 
   private getActionFromRequest(method: string, url: string): string | null {
-    // Map routes to audit actions
     const auditableRoutes = [
       { pattern: /\/auth\/login/, action: 'LOGIN_ATTEMPT' },
       { pattern: /\/auth\/register/, action: 'REGISTER_ATTEMPT' },

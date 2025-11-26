@@ -1,9 +1,9 @@
 export interface JwtPayload {
-  sub: string; // user id
+  sub: string; 
   email: string;
   roles: string[];
   type: 'access' | 'refresh';
-  tokenFamily?: string; // for refresh tokens
+  tokenFamily?: string; 
   iat?: number;
   exp?: number;
 }
