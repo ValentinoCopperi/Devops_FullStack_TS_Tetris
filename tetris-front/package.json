@@ -18,6 +18,8 @@
     "openapi-typescript": "^7.10.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.6",
+    "simple-icons": "^15.20.0",
     "tailwindcss": "^4.1.16"
   },
   "devDependencies": {

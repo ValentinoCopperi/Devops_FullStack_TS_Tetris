@@ -20,13 +20,26 @@ export const Cell = ({ value, rowIndex, collIndex, onClick }: CellProps) => {
 
     }
     
+    const cellColor = value === 1 ? colors.playerX : colors.playerO;
+    const isOccupied = value !== 0;
+
     return (
         <div
-            className="flex items-center justify-center min-w-[120px] min-h-[120px] m-0.5 border border-[#3c4a6b] bg-[#1e2742] hover:bg-[#253054] transition-all duration-150 ease-in-out"
+            style={{
+                backgroundColor: colors.cardBg,
+                borderColor: colors.border,
+                cursor: isOccupied ? 'not-allowed' : 'pointer'
+            }}
+            className={`flex items-center justify-center min-w-[120px] min-h-[120px] m-1 border transition-all duration-200 ease-in-out rounded-lg ${
+                !isOccupied ? 'hover:bg-[#242938] hover:border-opacity-100 hover:scale-105' : ''
+            }`}
             onClick={handleClickCell}
         >
             <p
-                className={`text-4xl font-semibold ${value === 1 ? 'text-[#ff5252]' : 'text-[#4dd0e1]'}`}
+                style={{ color: cellColor }}
+                className={`text-5xl font-bold transition-all duration-200 ${
+                    isOccupied ? 'scale-100' : ''
+                }`}
             >
                 {value !== 0 && (value === 1 ? "X" : "O")}
             </p>

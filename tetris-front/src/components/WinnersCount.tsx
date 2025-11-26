@@ -11,11 +11,14 @@ export const WinnerCounts = ({ historial }: WinnerProps) => {
 
     return (
         <div
-            style={{ backgroundColor: colors.cardBg, color: colors.textPrimary }}
-            className="absolute top-3 left-3 flex text-xl items-center justify-center rounded-3xl p-2"
+            style={{ 
+                backgroundColor: colors.cardBg, 
+                color: colors.textPrimary,
+                borderColor: colors.border
+            }}
+            className="absolute top-20 left-3 flex text-xl items-center justify-center rounded-xl p-4 border shadow-lg"
         >
-
-
+            <span className="mr-3 text-2xl">📊</span>
 
             {
                 Object.entries(historial).map(([player, wins]) => {
@@ -26,9 +29,11 @@ export const WinnerCounts = ({ historial }: WinnerProps) => {
                     return (
                         <p
                             key={player}
-                            className="mx-3"
+                            className="mx-3 font-semibold"
                         >
-                            <span style={{color : textColor}}>{playerText} </span>: {wins}
+                            <span style={{color : textColor}} className="text-2xl font-bold">{playerText}</span>
+                            <span className="mx-1">:</span>
+                            <span style={{color: colors.cyan}} className="font-bold">{wins}</span>
                         </p>
                     )
 

@@ -15,10 +15,20 @@ export const Turn = ( { turn } : TurnProps ) => {
 
     return (
         <div 
-            style={{backgroundColor : colors.cardBg , color : colors.textPrimary}}
-            className='p-3 rounded-3xl'
+            style={{
+                backgroundColor : colors.cardBg, 
+                color : colors.textPrimary,
+                borderColor: colors.border
+            }}
+            className='p-4 rounded-xl border shadow-lg'
         >
-            Turno de Jugador : <span style={{color : textColor}}>{turnText}</span>
+            <span className="text-base">🎮 Current Turn: </span>
+            <span 
+                style={{color : textColor}}
+                className="text-xl font-bold mx-1"
+            >
+                {turnText}
+            </span>
         </div>
     )
     

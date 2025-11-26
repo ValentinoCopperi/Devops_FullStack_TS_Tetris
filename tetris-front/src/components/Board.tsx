@@ -21,7 +21,13 @@ export const Board = ({ board, handleBoardChange, turn }: BoardProps) => {
 
     return (
 
-        <div className="flex flex-col">
+        <div 
+            className="flex flex-col p-4 rounded-2xl"
+            style={{
+                backgroundColor: 'rgba(26, 31, 46, 0.5)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}
+        >
 
             {
                 board.map((row, rowIndex) => {

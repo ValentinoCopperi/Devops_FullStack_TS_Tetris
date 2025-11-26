@@ -20,7 +20,7 @@ export const WinnerModal = ({ winner , reset}: WinnerModalProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className='fixed z-50 w-full h-full bg-black/80 backdrop-blur-sm flex items-center justify-center'
+            className='fixed z-50 w-full h-full bg-black/90 backdrop-blur-sm flex items-center justify-center'
         >
 
             <motion.div
@@ -33,7 +33,11 @@ export const WinnerModal = ({ winner , reset}: WinnerModalProps) => {
                     damping: 25,
                     delay: 0.1
                 }}
-                style={{ backgroundColor: colors.modalCard }}
+                style={{ 
+                    backgroundColor: colors.modalCard,
+                    borderColor: colors.cyan,
+                    boxShadow: `0 0 50px rgba(34, 211, 238, 0.3)`
+                }}
                 className='relative w-[500px] rounded-2xl border-2 shadow-2xl overflow-hidden'
             >
                 {/* Efecto de brillo en el borde */}
@@ -45,13 +49,28 @@ export const WinnerModal = ({ winner , reset}: WinnerModalProps) => {
                 />
 
                 {/* Contenido */}
-                <div className='relative p-12 flex flex-col items-center justify-center space-y-8'>
+                <div className='relative p-12 flex flex-col items-center justify-center space-y-6'>
+                    {/* Trofeo animado */}
+                    <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ 
+                            type: "spring" as const, 
+                            stiffness: 200, 
+                            damping: 10,
+                            delay: 0.2
+                        }}
+                        className='text-7xl'
+                    >
+                        🎉
+                    </motion.div>
+
                     {/* Ícono de victoria animado */}
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ 
-                            type: "spring", 
+                            type: "spring" as const, 
                             stiffness: 200, 
                             damping: 10,
                             delay: 0.3
@@ -70,15 +89,25 @@ export const WinnerModal = ({ winner , reset}: WinnerModalProps) => {
                         style={{ color: colors.textPrimary }}
                         className='text-3xl font-bold text-center'
                     >
-                        ¡Felicidades jugador{' '}
+                        Player{' '}
                         <span 
                             style={{ color: textColor }}
                             className='font-extrabold'
                         >
                             {ganador}
                         </span>
-                        !
+                        {' '}Wins!
                     </motion.h1>
+
+                    <motion.p
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.45 }}
+                        style={{ color: colors.cyan }}
+                        className='text-xl font-semibold'
+                    >
+                        Congratulations! 🎮
+                    </motion.p>
 
                     {/* Botón de reiniciar */}
                     <motion.button
@@ -88,13 +117,14 @@ export const WinnerModal = ({ winner , reset}: WinnerModalProps) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         style={{ 
-                            backgroundColor: textColor,
-                            color: colors.modalBg
+                            background: colors.gradient1,
+                            color: colors.textPrimary,
+                            boxShadow: `0 4px 15px rgba(102, 126, 234, 0.4)`
                         }}
-                        className='px-8 py-3 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-shadow duration-300'
+                        className='px-8 py-3 rounded-xl font-bold text-lg transition-all duration-300'
                         onClick={reset}
                     >
-                        Reiniciar Partida
+                        🔄 Play Again
                     </motion.button>
                 </div>
             </motion.div>

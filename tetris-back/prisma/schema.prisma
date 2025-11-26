@@ -15,10 +15,96 @@ datasource db {
 }
 
 
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  GITHUB
+}
+
 model User {
-  id String @id @default(uuid())
-  email String @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String        @id @default(uuid())
+  email         String        @unique
+  password      String?
+  firstName     String?
+  lastName      String?
+  isEmailVerified Boolean     @default(false)
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+  passwordResetToken String?
+  passwordResetExpires DateTime?
+  roles         Role[]        @default([USER])
+  provider      AuthProvider  @default(LOCAL)
+  providerId    String?
+  twoFactorSecret String?
+  twoFactorEnabled Boolean     @default(false)
+  twoFactorBackupCodes String?
+  isActive      Boolean       @default(true)
+  lastLoginAt   DateTime?
+  lastLoginIp   String?
+  lastLoginUserAgent String?
+  failedLoginAttempts Int      @default(0)
+  lockedUntil   DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]
+  permissions   UserPermission[]
+}
+
+model RefreshToken {
+  id          String   @id @default(uuid())
+  userId      String
+  token       String   @unique
+  tokenFamily String
+  isRevoked   Boolean  @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([token])
+  @@index([tokenFamily])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  action      String
+  resource    String?
+  details     String?  @db.Text
+  ipAddress   String?
+  userAgent   String?
+  success     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model UserPermission {
+  id          String   @id @default(uuid())
+  userId      String
+  resource    String
+  action      String
+  attributes  String?  @db.Text
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, resource, action])
+  @@index([userId])
 }
